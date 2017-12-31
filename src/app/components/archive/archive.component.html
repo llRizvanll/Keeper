@@ -1,0 +1,162 @@
+<div class="">
+  <div class="navbar navbar-info">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <ul class="navbar-toggle">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-header">Preferences</li>
+              <li><a [routerLink]="['/notes']">My Notes</a></li>
+              <li><a [routerLink]="['/archive-notes']">Archive Notes</a></li>
+              <li><a href="javascript:void(0)" [routerLink]="['/recycle-bin']">Recycle Bin</a></li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a href="javascript:void(0)" (click)="displayTypeChange()">
+                  {{displayList ? 'Grid View' : 'List View'}}
+                </a>
+              </li>
+              <li><a href="javascript:void(0)">Settings</a></li>
+              <li><a href="javascript:void(0)" [routerLink]="['/About']">About</a></li>
+            </ul>
+          </li>
+        </ul>
+        <a href="javascript:void(0)" class="navbar-brand" [routerLink]="['/notes']">Preserver </a>
+        <span class="navbar-brand"><i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp;&nbsp;Archive</span>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="javascript:void(0)" (click)="displayTypeChange()">
+              <i class="{{displayList ? 'fa fa-th' : 'fa fa-bars'}}"></i>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="glyphicon glyphicon-option-vertical"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-header">Preferences</li>
+              <li><a href="javascript:void(0)" [routerLink]="['/notes']">My Notes</a></li>
+              <li><a href="javascript:void(0)" [routerLink]="['/archive-notes']">Archive Notes</a></li>
+              <li><a href="javascript:void(0)" [routerLink]="['/recycle-bin']">Recycle Bin</a></li>
+              <li class="divider"></li>
+              <li><a href="javascript:void(0)">Settings</a></li>
+              <li><a href="javascript:void(0)" [routerLink]="['/About']">About</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <spinner *ngIf="spinner"></spinner>
+  <div class="{{ displayList ? 'container note animate' : 'container note grid-container animate'}}" [dragula]='"another-bag"' [dragulaModel]='notes'>
+    <div *ngFor='let text of notes' class="{{ displayList ? 'panel panel-default ' + text.doc.color : 'panel panel-default grid-item ' + text.doc.color}}" #noteRow [attr.id]="text.doc._id">
+      <div data-toggle="modal" data-target="#note_edit_modal" (click)="editModalNoteClick(text)">
+        <div class="panel-body my-note module line-clamp">
+          <p><strong>{{text.doc.title}}</strong></p>
+          <p>{{text.doc.note}}</p>
+        </div>
+      </div>
+      <div class="{{ 'panel-footer ' + text.doc.color}}">
+        <ul class="note-footer">
+          <li>
+            <a data-toggle="modal"
+               data-target="#remind_me_modal"
+               (click)="setRemindMeNote(text)"
+               class="btn btn-link btn-raised"
+               title="Remind">
+               <i class="fa fa-bell"></i>
+            </a>
+          </li>
+          <li><a href="javascript:void(0)" class="btn btn-link btn-raised"
+             title="Unarchive" (click)="unArchive(text, noteRow)">
+            <i class="fa fa-upload"></i>
+          </a></li>
+          <li class="dropup">
+            <a data-target="#" class="btn btn-link btn-raised dropup"
+              title="Color" data-toggle="dropdown">
+              <i class="fa fa-th-large"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-default', text)" class="btn btn-default btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-primary', text)" class="btn btn-primary btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-success', text)" class="btn btn-success btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-info', text)" class="btn btn-info btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-warning', text)" class="btn btn-warning btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-danger', text)" class="btn btn-danger btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-darkgray', text)" class="btn btn-darkgray btn-fab-mini"><i class=""></i></a></li>
+              <li><a href="javascript:void(0)" (click)="setNoteColor('label-primary-old', text)" class="btn btn-primary-old btn-fab-mini"><i class=""></i></a></li>
+            </ul>
+          </li>
+          <li><a href="javascript:void(0)" class="btn btn-link btn-raised"
+             title="Delete" (click)="deleteNote(text, noteRow)">
+            <i class="fa fa-trash"></i>
+          </a></li>
+        </ul>
+      </div>
+      <div class="{{text.doc.color + ' reminder-info'}}" *ngIf="text.doc.reminder">
+        <i class="fa fa-clock-o"></i> {{text.doc.reminder?.date}}<span class="pull-right"><a href="javascript:void(0)" (click)="removeReminder(text)"><i class="fa fa-times-circle"></i></a></span>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="note_edit_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="{{'modal-content edit-saved ' + toEditNote?.doc?.color}}">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <div class="form-group label-floating">
+            <input type="text" class="form-control edit-saved-input" placeholder="Title" [(ngModel)]="editNoteDraft.title" [value]="toEditNote?.doc.title" >
+            </div>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <textarea class="form-control edit-saved-textera" #editSavedTextarea modaleditorautosize placeholder="Write a note" [(ngModel)]="editNoteDraft.note" [value]="toEditNote?.doc.note"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" (click)="updateModalNote(toEditNote)">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="remind_me_modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Remind Me</h4>
+        </div>
+        <div class="modal-body">
+          <label><i class="fa fa-clock-o"></i> Set date and time</label>
+          <div class="form-group">
+              <input class="form-control"
+                    readonly="readonly"
+                    required
+                    placeholder="Set your schedule here"
+                    [(ngModel)]="remindMe.date"
+                    [min-date]="date2MinDate"
+                    ngui-datetime-picker>
+          </div>
+          <div class="form-group">
+            <select id="s1" class="form-control" [(ngModel)]="remindMe.repeat">
+              <option value="doesnotrepeat">Doesn't repeat</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" (click)="remindMe.date = null">CANCEL</button>
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" (click)="setReminderClick()">SET</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <simple-notifications [options]="notificationOptions"></simple-notifications>
+  <div class="container empty-notes-container" *ngIf="emptyHtmlMsg">
+    <div class="empty-notes-icon empty-archive"></div>
+    <div class="empty-notes">Your archived notes appear here</div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "dragula": "registry:npm/dragula#3.6.8+20160410191048",
+    "lodash": "registry:npm/lodash#4.0.0+20161015015725"
+  },
+  "globalDependencies": {
+    "pouchdb": "registry:dt/pouchdb#5.4.4+20160916155957"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Keeper",
+  "productName": "Keeper",
+  "version": "4.0.0",
+  "description": "Keeper is an notes organizer desktop app based on Electron.",
+  "main": "main.js",
+  "author": "",
+  "contributors": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/||Rizvan||"
+  },
+  "scripts": {
+    "start": "node start-electron.js",
+    "dev": "webpack-dev-server --content-base public/ --port 8080",
+    "build": "npm run clean && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "clean": "rimraf public/dist"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@angular/common": "~2.4.0",
+    "@angular/compiler": "~2.4.0",
+    "@angular/core": "~2.4.0",
+    "@angular/forms": "~2.4.0",
+    "@angular/http": "~2.4.0",
+    "@angular/platform-browser": "~2.4.0",
+    "@angular/platform-browser-dynamic": "~2.4.0",
+    "@angular/router": "~3.4.0",
+    "@ngui/datetime-picker": "^0.16.1",
+    "angular2-notifications": "^0.4.48",
+    "core-js": "^2.4.1",
+    "dragula": "^3.7.2",
+    "electron-prebuilt": "^1.4.13",
+    "lodash": "^4.17.3",
+    "pouchdb": "^6.1.0",
+    "rxjs": "5.0.1",
+    "zone.js": "^0.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.45",
+    "angular2-template-loader": "^0.4.0",
+    "awesome-typescript-loader": "^2.2.4",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "html-loader": "^0.4.3",
+    "html-webpack-plugin": "^2.15.0",
+    "null-loader": "^0.1.1",
+    "raw-loader": "^0.5.1",
+    "rimraf": "^2.5.2",
+    "style-loader": "^0.13.1",
+    "typescript": "~2.0.10",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-merge": "^0.14.0"
+  }
+}
